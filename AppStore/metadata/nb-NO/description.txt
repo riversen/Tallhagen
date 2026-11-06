@@ -1,0 +1,35 @@
+Tallhagen er et rolig mattespill for barn på rundt 6–8 år. Tallene vises som prikker, stolper og brikker barnet kan telle, så et tall blir en mengde man kan se, ikke bare et tegn på skjermen. Hele appen snakker og skriver norsk bokmål.
+
+FIRE LEKER OG ET KART
+
+Bygg tallet: Barnet bygger et måltall av tallbrikker, ved å trykke på dem eller dra dem til svarfeltet. Alle kombinasjoner med riktig sum teller, brikker kan tas tilbake, og et hint fullfører det barnet allerede har lagt.
+
+Finn tallvennen: Et regnestykke mangler ett tall. Det som mangler, vises som tomme plasser barnet kan telle, og barnet velger blant fire svar. Et feil svar viser hva summen ble, og om det var for mye eller for lite, så barnet kan prøve igjen.
+
+Del opp: Barnet får en mengde prikker og skal lage et bestemt antall til venstre, med en glidebryter eller pluss- og minusknapper. Den andre gruppen viser alltid resten, så barnet ser at de to delene til sammen blir det hele.
+
+Tallverkstedet: Fri lek med to tall. Barnet gjør dem større eller mindre og ser summen med en gang, som prikker i to farger. En knapp leser regnestykket høyt.
+
+Talløyene: Et kart med seks øyer i en dam, der barnet løser små oppgaver i tur og orden – først med tallstolper fra 1 til 10, så med tall til 20, 40 og 100, deretter med enere, tiere, hundrere og tusenere for tall helt opp til 9999, og til slutt med en vekt der begge sidene skal være like. Hver fullført oppgave gir én til tre stjerner og åpner den neste. Hint koster ingenting, og stjerner man har fått, beholder man.
+
+TALL SOM VOKSER MED BARNET
+
+Ved første start velger barnet mellom tall til 20, til 40 og til 100. I innstillingene finnes også til 10 og til 30, så voksne kan tilpasse nivået. Prikkene står i rader på fem med et lite mellomrom etter hver tier, slik at 10, 20 og 40 er lette å kjenne igjen. Med tall til 100 står de i rader på ti, så 100 blir ti rader med ti.
+
+LEST OPP PÅ NORSK
+
+Menyer, oppgaver, hint og tilbakemeldinger leses opp med iPadens egen norske stemme, så barn som ikke leser ennå, kan spille på egen hånd. Har du lastet ned en forbedret norsk stemme under Tilgjengelighet i iPadens innstillinger, bruker Tallhagen den automatisk. Hver skjerm har en stor lydknapp som slår den automatiske opplesingen av og på, og hver lek har en knapp som leser oppgaven en gang til.
+
+EN HAGE UTEN STRESS
+
+Spillet foregår i en rolig animert hage med sol, skyer, bakker og blomster. Fire vennlige følgesvenner – en snegl, en sommerfugl, en humle og et pinnsvin – holder barnet med selskap i hver sin lek og på hver sin øy, og gleder seg når en oppgave er løst. Ingen av dem reagerer på et feil svar. Det er ingen tidsgrenser, ingen liv og ingen poeng å miste. Et feil svar gir en vennlig forklaring og en ny sjanse. På forsiden står antall løste oppgaver sammen med et lite blomsterbed som fylles mens barnet leker.
+
+TILGJENGELIGHET
+
+Tallhagen fungerer med VoiceOver og støtter større tekst. Hver brikke, knapp og mengde har en norsk beskrivelse. Store knapper med god avstand gjør det lett for små hender.
+
+PERSONVERN
+
+Tallhagen har ingen reklame, ingen kjøp i appen, ingen abonnement og ingen brukerkontoer. Appen samler ikke inn opplysninger, sporer ingen og bruker ikke internett. Den husker bare valgt nivå, om lyden er på, hvor mange oppgaver som er løst og stjernene på Talløyene, og alt dette lagres på iPaden. Tellingen og stjernene kan nullstilles i innstillingene, og sletter du appen, forsvinner de også. Appen ber ikke om tilgang til mikrofon, kamera, posisjon eller kontakter.
+
+Tallhagen er laget for iPad.

@@ -1,0 +1,1 @@
+This is the first release of Tallhagen. It has four activities with numbers up to 100, an island map with stars, number bars, place value up to 9999 and an equation balance, Norwegian speech for menus and tasks, and a garden with four guide creatures.

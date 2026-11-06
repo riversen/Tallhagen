@@ -1,0 +1,1 @@
+Dette er den første utgaven av Tallhagen. Den har fire leker med tall opp til 100, et øykart med stjerner, tallstolper, plassverdi opp til 9999 og en likevekt, norsk opplesing av menyer og oppgaver, og en hage med fire følgesvenner som gleder seg over hver løst oppgave.

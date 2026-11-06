@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Xcode user state (per-developer, not shared)
+xcuserdata/
+*.xcuserstate
+**/xcshareddata/WorkspaceSettings.xcsettings
+Tallhagen.xcodeproj/project.xcworkspace/
+
+# Build output
+build/
+DerivedData/
+*.xcarchive
+
+# The versioned delivery archives (Tallhagen-iPad-vN.zip) stay out of the repository
+*.zip
+
+# Signing material and App Store Connect API keys never go into the repository (agent.md section 9)
+*.p8
+*.p12
+*.cer
+*.mobileprovision
+
+# Exported builds and test results
+*.ipa
+*.dSYM
+*.xcresult

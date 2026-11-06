@@ -1,0 +1,37 @@
+Tallhagen (Norwegian for "the number garden") is a calm math game for children aged about 6 to 8. Numbers are shown as dots, bars and blocks the child can count, so a number becomes a quantity you can see, not just a symbol on the screen.
+
+Please note: everything on screen and everything spoken is in Norwegian (Bokmål). There is no English mode. Tallhagen is intended for children who learn in Norwegian, including bilingual families.
+
+FOUR ACTIVITIES AND A MAP
+
+Bygg tallet (Build the number): The child builds a target number from number pieces by tapping them or dragging them into the answer area. Any combination with the right sum counts, pieces can be taken back, and a hint completes whatever the child has already placed.
+
+Finn tallvennen (Find the number friend): One number is missing from an addition. The missing amount is shown as empty slots the child can count, and the child chooses among four answers. A wrong answer shows what the sum came to and whether it was too much or too little, so the child can try again.
+
+Del opp (Split it up): The child gets a quantity of dots and has to put a given number on the left, using a slider or plus and minus buttons. The other group always shows the rest, so the child sees that the two parts together make the whole.
+
+Tallverkstedet (The number workshop): Free play with two numbers. The child makes them larger or smaller and sees the total right away as dots in two colors. A button reads the sum aloud.
+
+Talløyene (The number islands): A map of six islands in a pond, where the child solves short tasks in order – first with number bars from 1 to 10, then with numbers up to 20, 40 and 100, then with ones, tens, hundreds and thousands up to 9999, and finally with a balance that keeps both sides equal. Every finished task earns one to three stars and opens the next. Hints cost nothing, and stars once earned are kept.
+
+NUMBERS THAT GROW WITH THE CHILD
+
+On first launch the child chooses between numbers up to 20, up to 40 and up to 100. Settings also offer up to 10 and up to 30, so adults can adjust the level. Dots stand in rows of five with a small gap after every ten, so 10, 20 and 40 are easy to recognize. At the 100 level the rows hold ten dots, so 100 is ten rows of ten.
+
+READ ALOUD IN NORWEGIAN
+
+Menus, tasks, hints and feedback are read aloud with the iPad's own Norwegian voice, so children who cannot read yet can play on their own. If an enhanced Norwegian voice has been downloaded under Accessibility in the iPad's settings, Tallhagen uses it automatically. Every screen has a large sound button that turns automatic speech off and on, and every activity has a button that reads the task once more.
+
+A GARDEN WITHOUT PRESSURE
+
+The game takes place in an original, gently animated garden with a sun, clouds, hills and flowers. Four friendly companions – a snail, a butterfly, a bumblebee and a hedgehog – keep the child company, one in each activity and on each island, and celebrate when a task is solved. None of them reacts to a wrong answer. There are no timers, no lives and no points to lose. A wrong answer brings a friendly explanation and another chance. The home screen shows how many tasks have been solved, next to a small flower bed that fills up as the child plays.
+
+ACCESSIBILITY
+
+Tallhagen works with VoiceOver and supports larger text. Every piece, button and quantity has a Norwegian description. Large buttons with generous spacing make it easy for small hands.
+
+PRIVACY
+
+Tallhagen has no ads, no in-app purchases, no subscriptions and no user accounts. It collects no data, does not track anyone and does not use the internet. It only remembers the chosen level, whether sound is on, how many tasks have been solved and the stars on the island map, and all of this is stored on the iPad. The count and the stars can be reset in Settings, and deleting the app deletes them too. The app does not ask for access to the microphone, camera, location or contacts.
+
+Tallhagen is made for iPad.
