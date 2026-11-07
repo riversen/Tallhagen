@@ -492,6 +492,7 @@ struct BarGameView: View {
                     tint: tint,
                     identifier: "game.next",
                     hint: "Lager en ny oppgave",
+                    sound: .paper,
                     action: startNewPuzzle
                 )
             } else {
@@ -953,6 +954,7 @@ struct BarGameView: View {
             withAnimation(Motion.quick(reduceMotion)) {
                 cutSelection = cutSelection == piece.id ? nil : piece.id
             }
+            SoundCuePlayer.shared.play(.tick, enabled: voice)
         }
     }
 

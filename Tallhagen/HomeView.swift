@@ -108,6 +108,7 @@ struct HomeView: View {
             )
         }
         .buttonStyle(BouncyButtonStyle())
+        .simultaneousGesture(TapGesture().onEnded { SoundCuePlayer.shared.play(.paper, enabled: voice) })
         .narrationGlow(narrator.narratedItem == "home.map", tint: GardenStyle.blue)
         .accessibilityLabel("\(GameCopy.mapTitle). Reis fra øy til øy og samle stjerner. \(GameCopy.stars(mapProgress.totalStars(in: IslandMap.standard))).")
         .accessibilityHint("Åpner kartet")
@@ -180,6 +181,7 @@ struct HomeView: View {
                         identifier: "home.chooseLevel"
                     ) {
                         NorwegianVoice.shared.stop()
+                        SoundCuePlayer.shared.play(.paper, enabled: voice)
                         showingChooser = true
                     }
                 }
@@ -254,6 +256,7 @@ struct HomeView: View {
                         GameCard(game: game, isNarrated: isNarrated)
                     }
                     .buttonStyle(BouncyButtonStyle())
+                    .simultaneousGesture(TapGesture().onEnded { SoundCuePlayer.shared.play(.paper, enabled: voice) })
                     .narrationGlow(isNarrated, tint: game.tint)
                     .accessibilityLabel("\(game.title). \(game.subtitle)")
                     .accessibilityHint("Åpner leken")
@@ -433,7 +436,7 @@ private struct SettingsView: View {
                 Section {
                     Toggle("Les opp på norsk", isOn: $speakNorwegian)
                         .accessibilityIdentifier("settings.speech")
-                    Text("Appen leser opp menyer, oppgaver og svar med iPadens norske tale. Lydknappen nederst på skjermen slår det samme av og på.")
+                    Text("Appen leser opp menyer, oppgaver og svar med iPadens norske tale, og dempede lyder følger med når barnet velger, endrer noe eller løser en oppgave. Bryteren ovenfor og lydknappen nederst på skjermen slår begge deler av og på.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 } header: {
@@ -756,6 +759,7 @@ struct LevelChooserView: View {
     private func choose(_ level: LearningLevel) {
         storedLevel = level.rawValue
         TouchFeedback.success()
+        SoundCuePlayer.shared.play(.paper, enabled: voice)
         dismiss()
     }
 

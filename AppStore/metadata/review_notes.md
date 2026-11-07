@@ -1,4 +1,4 @@
-# Notes for App Review: Tallhagen 1.0
+# Notes for App Review: Tallhagen 1.1
 
 Tallhagen is an original, offline math game for children aged about 6 to 8, iPad only (iPadOS 17 or later). Interface and speech are Norwegian (Bokmål) by design; there is no English mode. No login or configuration is needed: open the app and play.
 

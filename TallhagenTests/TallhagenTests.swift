@@ -241,6 +241,16 @@ final class PlaceValueTests: XCTestCase {
     }
 }
 
+// MARK: - Lyd (version 12)
+
+/// The synthesised sound cues: quiet, short, silent at both ends, reproducible, and gated by the
+/// sound setting (Tests/LogicChecks.swift, `checkSoundCues`).
+final class SoundCueTests: XCTestCase {
+    func testSoundCuesStayQuietShortAndClean() {
+        LogicChecks.checkSoundCues(makeChecker())
+    }
+}
+
 // MARK: - Likevekt (version 10)
 
 final class BalanceTests: XCTestCase {

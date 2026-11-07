@@ -309,6 +309,162 @@ enum TouchFeedback {
     }
 }
 
+/// Plays the quiet sound cues of `SoundRecipes` (version 12): a paper slide for a choice, a tick
+/// for a change, a soft knock for a refused move, a chime for a solved task and a faint applause
+/// for a finished task on Talløyene. iPads have no haptic engine, so these sounds are what makes
+/// a tap feel answered there. They follow the switch of the automatic speech (the sound button
+/// and «Les opp på norsk», key `speakNorwegian`): with sound off nothing plays.
+///
+/// The audio session is ambient, so the cues and the speech mix with other apps' audio instead
+/// of stopping it, and they respect the iPad's silent mode. The cues are rendered off the main
+/// thread at launch; the engine starts with the first cue and pauses after six quiet seconds
+/// and in the background, and it is rebuilt if the iPad's media services restart. Call `play` on
+/// the main thread.
+final class SoundCuePlayer: NSObject, @unchecked Sendable {
+    static let shared = SoundCuePlayer()
+
+    private var engine = AVAudioEngine()
+    private let format = AVAudioFormat(standardFormatWithSampleRate: SoundRecipes.sampleRate, channels: 1)
+    private var players: [AVAudioPlayerNode] = []
+    /// When each voice finishes its cue (system uptime), so a new cue takes a free voice and never
+    /// cuts a chime short.
+    private var busyUntil: [TimeInterval] = []
+    private var buffers: [SoundCue: [AVAudioPCMBuffer]] = [:]
+    private var lastVariant: [SoundCue: Int] = [:]
+    private var gate = SoundCueGate()
+    private var idlePause: DispatchWorkItem?
+    private var isPrepared = false
+
+    /// Sets the ambient audio session and renders the cues. Called once, at launch.
+    func prepare() {
+        guard !isPrepared else { return }
+        isPrepared = true
+        try? AVAudioSession.sharedInstance().setCategory(.ambient)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(pauseEngine),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(mediaServicesWereReset),
+            name: AVAudioSession.mediaServicesWereResetNotification,
+            object: nil
+        )
+        DispatchQueue.global(qos: .utility).async {
+            var rendered: [SoundCue: [[Float]]] = [:]
+            for cue in SoundCue.allCases {
+                rendered[cue] = (0..<cue.variants).map { SoundRecipes.samples(for: cue, variant: $0) }
+            }
+            let result = rendered
+            DispatchQueue.main.async { self.install(result) }
+        }
+    }
+
+    /// Plays `cue`, unless sound is off or the same cue sounded a moment ago. Pass `enabled`
+    /// when the caller already holds the sound setting; otherwise the stored setting is read.
+    func play(_ cue: SoundCue, enabled: Bool? = nil) {
+        let soundOn = enabled ?? Self.isSoundOn()
+        let now = ProcessInfo.processInfo.systemUptime
+        guard let variants = buffers[cue], !variants.isEmpty, !players.isEmpty,
+              gate.allows(cue, soundOn: soundOn, at: now) else { return }
+        if !engine.isRunning {
+            do { try engine.start() } catch { return }
+        }
+        // A random variant, never the same one twice in a row, so a series does not form a tune.
+        var variant = Int.random(in: 0..<variants.count)
+        if variants.count > 1, variant == lastVariant[cue] { variant = (variant + 1) % variants.count }
+        lastVariant[cue] = variant
+        let buffer = variants[variant]
+        // A free voice if there is one; otherwise the one that finishes first.
+        let index = busyUntil.firstIndex { $0 <= now }
+            ?? busyUntil.indices.min { busyUntil[$0] < busyUntil[$1] } ?? 0
+        busyUntil[index] = now + Double(buffer.frameLength) / buffer.format.sampleRate
+        let player = players[index]
+        player.scheduleBuffer(buffer, at: nil, options: .interrupts, completionHandler: nil)
+        if !player.isPlaying { player.play() }
+        schedulePause()
+    }
+
+    /// Silences a cue that is still sounding (the chime or the applause) when sound is turned off.
+    func stopAll() {
+        guard engine.isRunning else { return }
+        players.forEach { $0.stop() }
+        busyUntil = busyUntil.map { _ in 0 }
+    }
+
+    /// The stored sound setting, shared with the sound button and «Les opp på norsk»; on by default.
+    static func isSoundOn(in defaults: UserDefaults = .standard) -> Bool {
+        guard defaults.object(forKey: StorageKey.speakNorwegian) != nil else { return true }
+        return defaults.bool(forKey: StorageKey.speakNorwegian)
+    }
+
+    private func install(_ rendered: [SoundCue: [[Float]]]) {
+        guard let format, players.isEmpty else { return }
+        for (cue, variants) in rendered {
+            buffers[cue] = variants.compactMap { Self.buffer(from: $0, format: format) }
+        }
+        attachPlayers()
+        // Allocate the render resources now, so the first cue only has to start the hardware.
+        engine.prepare()
+    }
+
+    /// Four voices, so a tick can sound while a chime is still ringing.
+    private func attachPlayers() {
+        guard let format else { return }
+        for _ in 0..<4 {
+            let player = AVAudioPlayerNode()
+            engine.attach(player)
+            engine.connect(player, to: engine.mainMixerNode, format: format)
+            players.append(player)
+            busyUntil.append(0)
+        }
+    }
+
+    private static func buffer(from samples: [Float], format: AVAudioFormat) -> AVAudioPCMBuffer? {
+        guard let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(samples.count)),
+              let channel = buffer.floatChannelData?[0] else { return nil }
+        for (index, sample) in samples.enumerated() {
+            channel[index] = sample
+        }
+        buffer.frameLength = AVAudioFrameCount(samples.count)
+        return buffer
+    }
+
+    /// Pauses the engine after six quiet seconds, so no audio hardware stays busy while the child
+    /// thinks; the next cue starts it again.
+    private func schedulePause() {
+        idlePause?.cancel()
+        let work = DispatchWorkItem { [weak self] in self?.pauseEngine() }
+        idlePause = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: work)
+    }
+
+    @objc private func pauseEngine() {
+        idlePause?.cancel()
+        idlePause = nil
+        // A cue cut off by the background must not resume when the next cue starts the engine.
+        players.forEach { $0.stop() }
+        busyUntil = busyUntil.map { _ in 0 }
+        if engine.isRunning { engine.pause() }
+    }
+
+    /// After the iPad's media services restart, the engine and its voices are gone and the session
+    /// has lost its settings: set the category again and build a new engine. The buffers stay valid.
+    @objc private func mediaServicesWereReset() {
+        DispatchQueue.main.async {
+            try? AVAudioSession.sharedInstance().setCategory(.ambient)
+            self.idlePause?.cancel()
+            self.idlePause = nil
+            self.engine = AVAudioEngine()
+            self.players = []
+            self.busyUntil = []
+            if !self.buffers.isEmpty { self.attachPlayers() }
+        }
+    }
+}
+
 /// Lets VoiceOver users hear feedback that appears on screen without moving focus.
 /// High priority, so VoiceOver's own focus-change speech does not cut the sentence off.
 enum VoiceOverAnnouncer {
@@ -320,17 +476,21 @@ enum VoiceOverAnnouncer {
     }
 }
 
-/// Shared reaction to an answer outcome: haptics, VoiceOver announcement and optional speech.
+/// Shared reaction to an answer outcome: haptics, a sound cue, VoiceOver announcement and optional
+/// speech. The cue and the speech follow the same sound setting (`voiceEnabled`).
 /// Views still own the solved counter, so incrementing it stays visible at the call site.
 enum GameFeedback {
     static func react(to outcome: AnswerOutcome, feedback: String?, voiceEnabled: Bool) {
         switch outcome {
         case .solved:
             TouchFeedback.success()
+            SoundCuePlayer.shared.play(.chime, enabled: voiceEnabled)
         case .progress:
             TouchFeedback.light()
+            SoundCuePlayer.shared.play(.tick, enabled: voiceEnabled)
         case .rejected, .incorrect:
             TouchFeedback.gentleWarning()
+            SoundCuePlayer.shared.play(.knock, enabled: voiceEnabled)
         case .ignored:
             return
         }

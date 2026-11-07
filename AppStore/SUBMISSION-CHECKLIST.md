@@ -7,7 +7,7 @@ Facts this checklist relies on, all already set in the project:
 | Fact | Value |
 | --- | --- |
 | Bundle identifier | `com.roysworld.tallhagen` (app target; lowercase since project version 11), set together with your team, automatic signing |
-| Version and build | `MARKETING_VERSION` 1.0, `CURRENT_PROJECT_VERSION` 1 |
+| Version and build | `MARKETING_VERSION` 1.1, `CURRENT_PROJECT_VERSION` 2 (version 1.0, build 1, went to App Review on 2026-11-06) |
 | Platform | iPad only (`TARGETED_DEVICE_FAMILY = 2`), iPadOS 17.0 or later, all four orientations, generated launch screen |
 | Info.plist | Generated from build settings; includes `ITSAppUsesNonExemptEncryption = NO` (no encryption of its own) and `LSApplicationCategoryType = public.app-category.education` |
 | Privacy manifest | `Tallhagen/PrivacyInfo.xcprivacy`: UserDefaults only (reason CA92.1), no tracking, no collected data |
@@ -31,7 +31,7 @@ You are already enrolled in the paid Apple Developer Program and publish EriksDa
 
 1. Open `Tallhagen.xcodeproj`, select the Tallhagen project in the navigator, then the Tallhagen target.
 2. Signing & Capabilities: "Automatically manage signing" is on. Team must be the paid team from step 1 (not the Personal Team). Bundle Identifier is already `com.roysworld.tallhagen`; leave it. With a destination such as "Any iOS Device (arm64)" selected, the Signing section must show "Xcode Managed Profile" and no red error. If it says the identifier cannot be registered, see Troubleshooting.
-3. General > Identity: Version 1.0, Build 1. These are the build settings `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`; the release script can override them per run (step 6). Display Name is Tallhagen, Minimum Deployments iPadOS 17.0, Supported Destinations iPad only, Device Orientation all four.
+3. General > Identity: Version 1.1, Build 2 (1.0, build 1, went to App Review on 2026-11-06). These are the build settings `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`; the release script can override them per run (step 6). Display Name is Tallhagen, Minimum Deployments iPadOS 17.0, Supported Destinations iPad only, Device Orientation all four.
 4. Build Settings > Info.plist Values: "App Uses Non-Exempt Encryption" (`INFOPLIST_KEY_ITSAppUsesNonExemptEncryption`) is NO. Check from the project root with:
 
    ```bash
@@ -127,7 +127,7 @@ VERSION=1.0.1 BUILD_NUMBER=3 ./Tools/release.sh --upload   # a later version
 
 What it does, in order: refuses to run while the app's bundle identifier still starts with `com.example`; reads the team from the project file, where Xcode stored the one you chose (or takes `TEAM_ID` for this run only), and refuses when none is set; checks the icon, the privacy manifest and `AppStore/ExportOptions.plist`; refuses while `PrivacyPolicy.address` in `Tallhagen/Theme.swift` is not an https address (a dry run only warns); runs `./Tests/run.sh`; archives the Release configuration into `~/Library/Developer/Xcode/Archives/Tallhagen-<timestamp>.xcarchive`, where Xcode's Organizer (Window > Organizer > Archives) lists it; then exports with a temporary copy of `AppStore/ExportOptions.plist` in which `TEAM_ID_PLACEHOLDER` is replaced by your team id (the project copy is never changed). With `--upload` the export destination becomes `upload` and xcodebuild sends the build to App Store Connect. The script writes nothing inside the project folder, and `./Tools/release.sh --help` lists every variable. `TEAM_ID` is never written into the project; the team you chose in Xcode is stored there on purpose.
 
-- `BUILD_NUMBER=<n>` is passed as `CURRENT_PROJECT_VERSION=<n>`; `VERSION=<x>` as `MARKETING_VERSION=<x>`. Without them the project values (1.0 and 1) are used. App Store Connect accepts each build number only once per version, and the export options leave the numbers unmanaged, so the number you pass is exactly what is uploaded.
+- `BUILD_NUMBER=<n>` is passed as `CURRENT_PROJECT_VERSION=<n>`; `VERSION=<x>` as `MARKETING_VERSION=<x>`. Without them the project values (1.1 and 2) are used. App Store Connect accepts each build number only once per version, and the export options leave the numbers unmanaged, so the number you pass is exactly what is uploaded.
 - Authentication: by default xcodebuild uses the Apple ID signed in to Xcode. To use an App Store Connect API key instead (for example on a Mac where nobody is signed in), create one under App Store Connect > Users and Access > Integrations > App Store Connect API (role App Manager or Developer), download the `.p8` file once and keep it outside the project, then run with `ASC_KEY_PATH=/path/to/AuthKey_XXXX.p8 ASC_KEY_ID=<key id> ASC_ISSUER_ID=<issuer id>`.
 
 Path B, Xcode: choose Product > Destination > Any iOS Device (arm64), then Product > Archive. The Organizer opens; select the archive and press Distribute App > App Store Connect > Upload. Keep "Upload your app's symbols" on and turn "Manage Version and Build Number" off so the numbers stay as in the project, then "Automatically manage signing" > Upload. Path B runs none of the script's checks and no tests: run the tests of step 2.6 and check with `./Tools/release.sh --dry-run`, which runs the script's checks without archiving (it only warns if `PrivacyPolicy.address` is empty or not an https address). (A signed `.ipa` from path A can also be uploaded with Apple's Transporter app, or from the Organizer via Distribute App with the same archive.)
@@ -142,7 +142,7 @@ After the upload:
 
 The list the release script prints after an upload is a short reminder. Do the steps below in their order: the contact details (7.2) and the release choice (7.3) come before Add for Review (7.4).
 
-1. On the version page scroll to Build and press the plus sign (or "Add Build"), choose the processed build (1.0, build 1 or the latest) and press Done.
+1. On the version page scroll to Build and press the plus sign (or "Add Build"), choose the processed build (the latest; for the update with the sound cues 1.1, build 2) and press Done.
 2. App Review Information: leave "Sign-in required" unchecked (there are no accounts). Enter your first name, last name, phone number and e-mail address in the Contact Information fields; they go only into App Store Connect. In Notes paste `AppStore/metadata/review_notes.md`; the field takes 4,000 characters and the file is just under (`AppStore/metadata/LIMITS.md` has the measured count), so if the field refuses it, shorten the glossary table. The notes already carry the Kids-category statement and say that the privacy policy address stands under Innstillinger (step 2.7). No attachment is needed.
 3. Version Release: choose "Manually release this version" for a first release (you decide the day) or "Automatically release this version".
 4. Press Save, then "Add for Review" at the top right, review the summary and press "Submit to App Review". The status changes to "Waiting for Review".
@@ -154,7 +154,7 @@ The list the release script prints after an upload is a short reminder. Do the s
 2. For every later update, before archiving:
    - raise `CURRENT_PROJECT_VERSION` (the build number: 2, 3, ...) for every upload, even for the same version, in Xcode or with `BUILD_NUMBER`;
    - raise `MARKETING_VERSION` (the version: 1.0.1, 1.1, 2.0) for every version that reaches the public, in Xcode or with `VERSION`;
-   - in App Store Connect press "+ Version or Platform" on the app page, enter the same version number, and write the "What's New in This Version" text in Norwegian and English (`release_notes.txt` in `AppStore/metadata/nb-NO/` and `en-US/` holds the first version's text as a model; write new text for each update);
+   - in App Store Connect press "+ Version or Platform" on the app page, enter the same version number, and write the "What's New in This Version" text in Norwegian and English (`release_notes.txt` in `AppStore/metadata/nb-NO/` and `en-US/` holds the text for 1.1, the update with the sound cues; write new text for each later update);
    - replace screenshots if the screens changed, re-answer the age rating if content changed, keep the App Privacy answers as long as the app still collects nothing;
    - run `./Tests/run.sh` and the Xcode tests, then `./Tools/release.sh --upload` with the new numbers.
 3. Keep every archive (the Organizer keeps them in `~/Library/Developer/Xcode/Archives`); they are needed to read crash reports for that build.
@@ -171,7 +171,7 @@ Prepared in the kit:
 - `github.com/riversen/Tallhagen` (GitHub Pages, from its `docs` folder): the hosted privacy policy with the date and contact filled in, a support page and a short start page (step 2.7).
 - `AppStore/screenshots/13-inch/`: ten screenshots from the simulator at the required sizes, seven portrait and three landscape.
 - `AppStore/ExportOptions.plist` and `Tools/release.sh`: a checked, repeatable archive, export and upload.
-- In the project: the bundle identifier, version 1.0 and build 1, the encryption key, the privacy manifest, the alpha-free icon, the generated launch screen, the iPad-only settings and the tests.
+- In the project: the bundle identifier, version 1.1 and build 2, the encryption key, the privacy manifest, the alpha-free icon, the generated launch screen, the iPad-only settings and the tests.
 
 Only you can:
 
@@ -195,4 +195,5 @@ Only you can:
 - "Unable to process request - PLA Update available" or any "agreement" message during upload: the Account Holder has to accept the updated agreement in App Store Connect > Agreements, Tax, and Banking.
 - The build never appears on the version page: it is still processing (wait for the e-mail), it was uploaded under a different bundle identifier, or it was rejected during processing (the e-mail says why, for example a missing icon size or a duplicate build number).
 - The Norwegian voice sounds mechanical for testers or reviewers, or the iPad reads Norwegian with a foreign voice: the device has only the compact voice or none. Download Nora (Enhanced) or Nora (Premium) under Settings > Accessibility > Read & Speak (Spoken Content on iPadOS 17 and 18) > Voices > Norwegian; the app switches to it by itself. This is also explained in `AppStore/metadata/review_notes.md`.
+- `error: exportArchive Copy failed`, while Xcode's distribution log shows `rsync error: syntax or usage error`: a newer rsync earlier on the PATH (Homebrew's 3.x in `/usr/local/bin`, for example) shadows Apple's `/usr/bin/rsync`, which Xcode's export expects. Since version 12 `Tools/release.sh` puts Apple's tools first. For an export by hand, run `PATH=/usr/bin:/bin:/usr/sbin:/sbin xcodebuild -exportArchive …`, or distribute from the Organizer.
 - `./Tools/release.sh` refuses to start: read its message. It stops when the bundle identifier still starts with `com.example`, when no `DEVELOPMENT_TEAM` is in the project and `TEAM_ID` is not set, when `BUILD_NUMBER` or `VERSION` is malformed, when only some of the `ASC_*` variables are set, when `EXPORT_DIR` points inside the project, when `AppStore/ExportOptions.plist` no longer contains `TEAM_ID_PLACEHOLDER`, or when `PrivacyPolicy.address` in `Tallhagen/Theme.swift` is empty or not an https address (step 2.7).

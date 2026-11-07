@@ -8,6 +8,7 @@ trap 'rm -rf "$test_dir"' EXIT
 swiftc \
   Tallhagen/MathLogic.swift \
   Tallhagen/GameSessions.swift \
+  Tallhagen/SoundRecipes.swift \
   Tests/SeededGenerator.swift \
   Tests/LogicChecks.swift \
   Tests/main.swift \

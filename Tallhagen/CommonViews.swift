@@ -146,10 +146,16 @@ struct BigActionButton: View {
     let tint: Color
     var identifier: String? = nil
     var hint: String? = nil
+    /// A cue for buttons that move on (the next task, back to the map); none for checks, whose
+    /// outcome brings its own cue.
+    var sound: SoundCue? = nil
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            if let sound { SoundCuePlayer.shared.play(sound) }
+            action()
+        } label: {
             Label(label, systemImage: symbol)
                 .font(.garden(.title3, weight: .bold))
                 .frame(maxWidth: .infinity, minHeight: 60)
@@ -285,8 +291,11 @@ struct SoundToggleButton: View {
             }
             if !voice {
                 NorwegianVoice.shared.stop()
+                SoundCuePlayer.shared.stopAll()
             }
             TouchFeedback.light()
+            // Turning sound on answers with a tick; turning it off stays silent.
+            if voice { SoundCuePlayer.shared.play(.tick, enabled: true) }
         } label: {
             Label(voice ? "Lyd på" : "Lyd av", systemImage: voice ? "speaker.wave.2.fill" : "speaker.slash.fill")
                 // The speaker swaps with the native symbol transition (instant under Reduce Motion).
@@ -448,6 +457,7 @@ struct GameScaffold<Content: View>: View {
                         HStack {
                             Button {
                                 NorwegianVoice.shared.stop()
+                                SoundCuePlayer.shared.play(.paper)
                                 dismiss()
                             } label: {
                                 Label("Tilbake", systemImage: "arrow.left")

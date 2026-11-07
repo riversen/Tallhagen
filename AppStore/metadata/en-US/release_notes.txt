@@ -1,1 +1,1 @@
-This is the first release of Tallhagen. It has four activities with numbers up to 100, an island map with stars, number bars, place value up to 9999 and an equation balance, Norwegian speech for menus and tasks, and a garden with four guide creatures.
+New in this version: soft, quiet sounds when the child makes a choice, changes something or solves a task, and a little applause when a task on Talløyene is complete. The sound button at the bottom of the screen turns the sounds off together with the speech.

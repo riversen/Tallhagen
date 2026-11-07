@@ -1,1 +1,1 @@
-Dette er den første utgaven av Tallhagen. Den har fire leker med tall opp til 100, et øykart med stjerner, tallstolper, plassverdi opp til 9999 og en likevekt, norsk opplesing av menyer og oppgaver, og en hage med fire følgesvenner som gleder seg over hver løst oppgave.
+Nytt i denne versjonen: dempede, rolige lyder når barnet velger, endrer noe eller løser en oppgave, og en liten applaus når en oppgave på Talløyene er fullført. Lydknappen nederst på skjermen slår lydene av sammen med opplesingen.

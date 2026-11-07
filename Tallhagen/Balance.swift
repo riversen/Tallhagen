@@ -200,7 +200,7 @@ struct BalanceView: View {
             }
 
             if session.isSolved {
-                BigActionButton(label: "Neste oppgave", symbol: "arrow.right.circle.fill", tint: tint, identifier: "game.next", hint: "Lager en ny oppgave", action: startNewPuzzle)
+                BigActionButton(label: "Neste oppgave", symbol: "arrow.right.circle.fill", tint: tint, identifier: "game.next", hint: "Lager en ny oppgave", sound: .paper, action: startNewPuzzle)
             } else {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 14) {

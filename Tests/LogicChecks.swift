@@ -1740,6 +1740,52 @@ enum LogicChecks {
         c.equal(GameCopy.moves(4), "4 trekk", "Moves")
     }
 
+    // MARK: Sound cues
+
+    /// The sound cues must stay quiet, short and clean: never above their peak (every peak at
+    /// or below -22 dBFS), at most two seconds long, silent at both ends, without offset and
+    /// reproducible. The gate keeps every cue silent while sound is off and thins out fast series.
+    static func checkSoundCues(_ c: LogicChecker) {
+        for cue in SoundCue.allCases {
+            // 0.0795 is -21.99 dBFS.
+            c.check(cue.peak > 0 && cue.peak <= 0.0795, "\(cue.rawValue) peak \(cue.peak) must stay at or below -22 dBFS")
+            c.check(cue.variants >= 1, "\(cue.rawValue) needs at least one variant")
+            for variant in 0..<cue.variants {
+                let samples = SoundRecipes.samples(for: cue, variant: variant)
+                let label = "Sound cue \(cue.rawValue), variant \(variant)"
+                c.check(!samples.isEmpty, "\(label) has samples")
+                c.check(Double(samples.count) / SoundRecipes.sampleRate <= 2.0, "\(label) lasts at most two seconds")
+                c.check(samples.allSatisfy { $0.isFinite }, "\(label) holds only finite samples")
+                let loudest = samples.reduce(Float(0)) { max($0, abs($1)) }
+                c.check(loudest <= cue.peak * 1.0001, "\(label) peak \(loudest) above \(cue.peak)")
+                c.check(loudest >= cue.peak * 0.999, "\(label) peak \(loudest) below its target \(cue.peak)")
+                c.check(abs(samples.first ?? 1) < 0.0005 && abs(samples.last ?? 1) < 0.0005,
+                        "\(label) must start and end in silence")
+                // The recipe itself must have died away before it ends (the last 10 ms at least
+                // 26 dB below the peak); the short safety fade at the very end cannot hide a cut.
+                let tail = samples.suffix(Int(SoundRecipes.sampleRate * 0.01))
+                let tailPeak = tail.reduce(Float(0)) { max($0, abs($1)) }
+                c.check(tailPeak <= loudest * 0.05, "\(label) is still sounding when it ends (\(tailPeak))")
+                let mean = samples.reduce(Float(0), +) / Float(max(1, samples.count))
+                c.check(abs(mean) <= cue.peak * 0.01, "\(label) has an offset of \(mean)")
+                c.check(SoundRecipes.samples(for: cue, variant: variant) == samples, "\(label) must be reproducible")
+            }
+            if cue.variants > 1 {
+                c.check(SoundRecipes.samples(for: cue, variant: 0) != SoundRecipes.samples(for: cue, variant: 1),
+                        "\(cue.rawValue) variants must differ")
+            }
+        }
+        var gate = SoundCueGate()
+        c.check(!gate.allows(.tick, soundOn: false, at: 0), "No cue plays while sound is off")
+        c.check(gate.allows(.tick, soundOn: true, at: 0), "The first tick plays")
+        c.check(!gate.allows(.tick, soundOn: true, at: 0.01), "A second tick 10 ms later is thinned out")
+        c.check(gate.allows(.chime, soundOn: true, at: 0.01), "Different cues do not block each other")
+        c.check(gate.allows(.tick, soundOn: true, at: SoundCue.tick.minimumInterval + 0.001), "A tick after the interval plays")
+        var quiet = SoundCueGate()
+        _ = quiet.allows(.paper, soundOn: false, at: 0)
+        c.check(quiet.allows(.paper, soundOn: true, at: 0.01), "A play refused while sound is off does not count as played")
+    }
+
     // MARK: Everything
 
     static func runAll(_ c: LogicChecker, rounds: Int, seed: UInt64) {
@@ -1769,5 +1815,6 @@ enum LogicChecks {
         checkRandomizedBalance(c, rounds: rounds, seed: seed)
         checkBalanceSession(c)
         checkBalanceCopy(c)
+        checkSoundCues(c)
     }
 }

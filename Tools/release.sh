@@ -37,6 +37,11 @@
 # The script writes nothing inside the project folder: the temporary export options live in a
 # temporary directory, the archive in Xcode's archive folder and the export in EXPORT_DIR.
 set -euo pipefail
+# Apple's own tools first. Xcode's export runs rsync from PATH, and a newer rsync placed before
+# /usr/bin (Homebrew's 3.x, for example) rejects Xcode's options: the export would then stop with
+# "error: exportArchive Copy failed".
+PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+export PATH
 
 mode="export"
 dry_run="no"

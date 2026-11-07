@@ -17,7 +17,7 @@ where `count_metadata.py` is the small script reproduced at the end of this file
 | nb-NO/promotional_text.txt | Promotional text | 170 | 158 | 159 | ok |
 | nb-NO/description.txt | Description | 4000 | 3549 | 3550 | ok |
 | nb-NO/keywords.txt | Keywords (commas included) | 100 | 99 | 100 | ok |
-| nb-NO/release_notes.txt | What's New in This Version | 4000 | 270 | 271 | ok |
+| nb-NO/release_notes.txt | What's New in This Version | 4000 | 230 | 231 | ok |
 | nb-NO/support_url.txt | Support URL | none published (must be a valid URL) | 49 | 50 | ok |
 | nb-NO/marketing_url.txt | Marketing URL | none published (must be a valid URL) | 34 | 35 | ok |
 | nb-NO/privacy_url.txt | Privacy Policy URL | none published (must be a valid URL) | 49 | 50 | ok |
@@ -26,7 +26,7 @@ where `count_metadata.py` is the small script reproduced at the end of this file
 | en-US/promotional_text.txt | Promotional text | 170 | 168 | 169 | ok |
 | en-US/description.txt | Description | 4000 | 3990 | 3991 | ok |
 | en-US/keywords.txt | Keywords (commas included) | 100 | 96 | 97 | ok |
-| en-US/release_notes.txt | What's New in This Version | 4000 | 251 | 252 | ok |
+| en-US/release_notes.txt | What's New in This Version | 4000 | 258 | 259 | ok |
 | en-US/support_url.txt | Support URL | none published (must be a valid URL) | 49 | 50 | ok |
 | en-US/marketing_url.txt | Marketing URL | none published (must be a valid URL) | 34 | 35 | ok |
 | en-US/privacy_url.txt | Privacy Policy URL | none published (must be a valid URL) | 49 | 50 | ok |

@@ -158,6 +158,7 @@ struct ChallengePlayView: View {
             withAnimation(Motion.spring(reduceMotion)) {
                 showingCompletion = true
             }
+            SoundCuePlayer.shared.play(.applause, enabled: voice)
             let sentence = GameCopy.challengeComplete + " " + GameCopy.challengeResult(stars: host.run.stars)
             VoiceOverAnnouncer.announce(sentence)
             NorwegianVoice.shared.sayAfterCurrent(sentence, enabled: voice)
@@ -168,6 +169,7 @@ struct ChallengePlayView: View {
         completionTask?.cancel()
         completionTask = nil
         NorwegianVoice.shared.stop()
+        SoundCuePlayer.shared.play(.paper, enabled: voice)
         withAnimation(Motion.quick(reduceMotion)) {
             showingCompletion = false
         }
@@ -205,6 +207,7 @@ struct ChallengeStatusStrip: View {
         HStack(spacing: 12) {
             Button {
                 NorwegianVoice.shared.stop()
+                SoundCuePlayer.shared.play(.paper)
                 dismiss()
             } label: {
                 Image(systemName: "arrow.left")
@@ -319,6 +322,7 @@ struct ChallengeCompletionCard: View {
                     tint: tint,
                     identifier: "challenge.toMap",
                     hint: "Går tilbake til Talløyene",
+                    sound: .paper,
                     action: toMap
                 )
 

@@ -115,6 +115,7 @@ struct IslandMapView: View {
     private var backButton: some View {
         Button {
             NorwegianVoice.shared.stop()
+            SoundCuePlayer.shared.play(.paper)
             dismiss()
         } label: {
             Image(systemName: "arrow.left")
@@ -401,6 +402,8 @@ private struct MapNodeButton: View {
         }
         .buttonStyle(BouncyButtonStyle())
         .disabled(!isUnlocked)
+        // An open stone answers with the paper slide, a locked one with the soft knock.
+        .simultaneousGesture(TapGesture().onEnded { SoundCuePlayer.shared.play(isUnlocked ? .paper : .knock) })
         .narrationGlow(isNarrated, tint: tint, cornerRadius: 44)
         .accessibilityLabel(label)
         .accessibilityHint(isUnlocked ? "Åpner oppgaven" : "")

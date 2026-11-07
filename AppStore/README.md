@@ -1,6 +1,6 @@
 # AppStore: the submission kit for Tallhagen
 
-Everything in this folder exists to get Tallhagen 1.0 (bundle identifier `com.roysworld.tallhagen`, iPad only) through App Store Connect. Start with `SUBMISSION-CHECKLIST.md`; the other files are the material it refers to. Paths below are relative to the project root. Nothing in this folder contains the owner's e-mail address, phone number or team identifier; App Store Connect asks for those separately.
+Everything in this folder exists to get Tallhagen 1.0 and its updates (now 1.1, build 2; bundle identifier `com.roysworld.tallhagen`, iPad only) through App Store Connect. Start with `SUBMISSION-CHECKLIST.md`; the other files are the material it refers to. Paths below are relative to the project root. Nothing in this folder contains the owner's e-mail address, phone number or team identifier; App Store Connect asks for those separately.
 
 ## Files and folders
 
@@ -23,7 +23,7 @@ Everything in this folder exists to get Tallhagen 1.0 (bundle identifier `com.ro
 
 ## Facts the kit relies on
 
-- Project: `Tallhagen.xcodeproj`, scheme `Tallhagen`, Release configuration, `MARKETING_VERSION` 1.0, `CURRENT_PROJECT_VERSION` 1, automatic signing with the team set in Xcode, iPadOS 17.0 or later, iPad only, all four orientations.
+- Project: `Tallhagen.xcodeproj`, scheme `Tallhagen`, Release configuration, `MARKETING_VERSION` 1.1, `CURRENT_PROJECT_VERSION` 2, automatic signing with the team set in Xcode, iPadOS 17.0 or later, iPad only, all four orientations.
 - The Info.plist is generated from build settings (`GENERATE_INFOPLIST_FILE = YES`), including `ITSAppUsesNonExemptEncryption = NO`, so App Store Connect does not ask the export compliance question for each build, and `LSApplicationCategoryType = public.app-category.education`.
 - The privacy manifest `Tallhagen/PrivacyInfo.xcprivacy` declares only UserDefaults (reason CA92.1), no tracking and no collected data. The app stores four UserDefaults values (`learningLevel`, `speakNorwegian`, `solvedTotal`, `islandStars`); the privacy policy, `app_privacy.md` and `review_notes.md` name all four.
 - The listing texts name children as the audience, which App Review Guidelines 2.3.8 and 5.1.4 allow only with the Made for Kids selection (checklist step 4.4); `age_rating.md` holds the replacement texts for the other case.

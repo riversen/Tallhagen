@@ -1,6 +1,6 @@
 # App Privacy answers for Tallhagen (App Store Connect)
 
-These are the answers to type into the **App Privacy** section of App Store Connect for Tallhagen 1.0. They are written so that the owner filling in the form and an App Review reader can both see why every answer is "no": the app has no network code at all, so it never sends anything off the iPad.
+These are the answers to type into the **App Privacy** section of App Store Connect for Tallhagen 1.0 and 1.1 (the sound cues of 1.1 collect nothing). They are written so that the owner filling in the form and an App Review reader can both see why every answer is "no": the app has no network code at all, so it never sends anything off the iPad.
 
 ## Summary
 

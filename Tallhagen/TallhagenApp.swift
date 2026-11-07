@@ -2,6 +2,11 @@ import SwiftUI
 
 @main
 struct TallhagenApp: App {
+    init() {
+        // Sets the ambient audio session and renders the quiet sound cues off the main thread.
+        SoundCuePlayer.shared.prepare()
+    }
+
     var body: some Scene {
         WindowGroup {
             HomeView()

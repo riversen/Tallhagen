@@ -46,6 +46,7 @@ struct BuildGameView: View {
                     tint: GardenStyle.teal,
                     identifier: "game.next",
                     hint: "Lager et nytt måltall",
+                    sound: .paper,
                     action: startNewPuzzle
                 )
             } else {
@@ -371,6 +372,7 @@ struct PairGameView: View {
                     tint: GardenStyle.orange,
                     identifier: "game.next",
                     hint: "Lager et nytt regnestykke",
+                    sound: .paper,
                     action: startNewPuzzle
                 )
             } else {
@@ -592,6 +594,7 @@ struct SplitGameView: View {
                     tint: GardenStyle.purple,
                     identifier: "game.next",
                     hint: "Lager en ny oppgave",
+                    sound: .paper,
                     action: startNewPuzzle
                 )
             } else {
@@ -647,6 +650,8 @@ struct SplitGameView: View {
         withAnimation(Motion.quick(reduceMotion)) {
             session.setLeft(value)
         }
+        // One tick per step of the slider, like a notch; a fast drag is thinned out.
+        SoundCuePlayer.shared.play(.tick, enabled: voice)
     }
 
     private func adjust(_ change: (inout SplitSession) -> Void) {
@@ -654,6 +659,7 @@ struct SplitGameView: View {
             change(&session)
         }
         TouchFeedback.light()
+        SoundCuePlayer.shared.play(.tick, enabled: voice)
         // The amount lives in another element, so VoiceOver users hear the result here.
         VoiceOverAnnouncer.announce(session.spokenState)
     }
@@ -808,6 +814,7 @@ struct WorkshopView: View {
             mutation(&session)
         }
         TouchFeedback.light()
+        SoundCuePlayer.shared.play(.tick, enabled: voice)
         VoiceOverAnnouncer.announce(session.spokenEquation)
     }
 

@@ -336,6 +336,7 @@ struct PlaceValueView: View {
                     tint: tint,
                     identifier: "game.next",
                     hint: "Lager en ny oppgave",
+                    sound: .paper,
                     action: startNewPuzzle
                 )
             } else {
